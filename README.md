@@ -1,5 +1,5 @@
 # advent22
 
-Keeping track of my Advent of Code solutions (or attempts) in Rust for 2022.
+My Advent of Code solutions (or attempts) in Rust for 2022.
 
 https://adventofcode.com/
