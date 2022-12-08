@@ -1,58 +1,42 @@
-use std::{str::FromStr, string::ParseError};
-use std::cmp;
+use std::collections::HashSet;
 
 
-const SAMPLE: &str = "";
-
-struct Range {
-    start: usize,
-    end: usize,
-}
-
-impl Range {
-    //contains check if self contains other
-    fn contains(&self, other:&Self) -> bool {
-        self.start <= other.start && self.end >= other.end 
-    }
-
-    fn overlaps(&self, other:&Self) -> bool {
-        //min(two starts) <= max(two ends)
-        cmp::max(self.start, other.start) <= cmp::min(self.end, other.end)
-    }
-}
-
-impl FromStr for Range {
-    type Err = ParseError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let pair: Vec<_> = s.split('-').flat_map(usize::from_str).collect();
-        let [start, end] = &pair[..] else { todo!()};
-        Ok(Self {
-            start: *start,
-            end: *end,
-        })
-    }
-}
-
-fn inner(s: &str, f: fn(&Range, &Range) -> bool) -> usize {
-    s.lines()
-        .map(|line| {
-            let rs = line.split(',').flat_map(Range::from_str);
-            let [a, b] = &rs.collect::<Vec<_>>()[..] else { todo!() };
-            (f(a, b) || f(b, a)) as usize
-        })
-        .sum()
-}
+const SAMPLE: &str = "bvwbjplbgvbhsrlpgdmjqwftvncz";
 
 fn load_input() -> String {
     std::fs::read_to_string("input.txt").unwrap()
 }
 
+fn part1(s: &str) -> usize {
+    let v: Vec<_> = s.chars().collect();
+    let mut count = 4;
+    for w in v.windows(4) {
+        let h: HashSet<_> = w.iter().collect();
+        if h.len() == 4 {
+            break;
+        }
+        count += 1;
+    }
+    return count;
+}
+
+fn part2(s: &str) -> usize {
+    let v: Vec<_> = s.chars().collect();
+    let mut count = 14;
+    for w in v.windows(14) {
+        let h: HashSet<_> = w.iter().collect();
+        if h.len() == 14 {
+            break;
+        }
+        count += 1;
+    }
+    return count;
+}
+
 fn main() {
     let s = load_input();
-    let p1 = inner(&s, Range::contains);
-    let p2 = inner(&s, Range::overlaps);
-
-    println!("the answer to part 1 is {p1}");
-    println!("the answer to part 2 is {p2}");
+    let p1 = part1(&s);
+    let p2 = part2(&s);
+    println!("the answert to part1 is {p1}.");
+    println!("the answert to part2 is {p2}.");
 }
